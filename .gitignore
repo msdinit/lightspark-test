@@ -1,0 +1,35 @@
+.anchor
+.DS_Store
+target
+**/*.rs.bk
+node_modules
+test-ledger
+.yarn
+.surfpool
+
+# Local documentation
+docs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+
+# Build artifacts
+*.so
+dist/
+build/
+
+# Environment
+.env
+.env.local
+
+# Payment app local data
+app/backend/data/
+
+# Logs
+*.log
