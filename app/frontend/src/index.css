@@ -200,7 +200,15 @@ button:disabled {
   color: var(--warn);
 }
 
+.badge.settling {
+  color: var(--warn);
+}
+
 .badge.paid {
+  color: var(--ok);
+}
+
+.badge.settled {
   color: var(--ok);
 }
 

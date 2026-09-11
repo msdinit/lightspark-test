@@ -57,3 +57,7 @@ export function updatePayment(
 export function listPendingPayments(): Payment[] {
   return readAll().filter((p) => p.status === "pending");
 }
+
+export function listPaymentsToSettle(): Payment[] {
+  return readAll().filter((p) => p.status === "settling");
+}

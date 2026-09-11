@@ -18,6 +18,7 @@ const PAYMENT_TTL_MS = Number(process.env.PAYMENT_TTL_MS ?? 30 * 60 * 1000);
 export function toPublicPayment(payment: Payment): PublicPayment & {
   explorerAddressUrl: string;
   explorerTxUrl: string | null;
+  settlementTxUrl: string | null;
 } {
   const { secretKey: _secret, ...rest } = payment;
   return {
@@ -26,6 +27,9 @@ export function toPublicPayment(payment: Payment): PublicPayment & {
     explorerTxUrl: payment.signature
       ? explorerTxUrl(payment.signature)
       : null,
+    settlementTxUrl: payment.settlementSignature
+        ? explorerTxUrl(payment.settlementSignature)
+        : null,
   };
 }
 
@@ -53,6 +57,8 @@ export function createOneTimePayment(amountSolInput?: number) {
     paidAt: null,
     expiresAt: new Date(now + PAYMENT_TTL_MS).toISOString(),
     signature: null,
+    settledAt: null,
+    settlementSignature: null
   });
 
   return toPublicPayment(payment);
@@ -68,4 +74,9 @@ export function listPublicPayments() {
   return listPayments()
     .map(toPublicPayment)
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+export function settle(id: string) {
+  const payment = getPayment(id);
+  if (!payment) return null;
 }

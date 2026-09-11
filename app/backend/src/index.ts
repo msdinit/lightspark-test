@@ -8,7 +8,7 @@ import {
   getPublicPayment,
   listPublicPayments,
 } from "./payments.js";
-import { startPaymentWatcher } from "./watcher.js";
+import {startPaymentWatcher, startSettlerWatcher} from "./watcher.js";
 
 const PORT = Number(process.env.PORT ?? 3001);
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -59,6 +59,7 @@ app.get("*", (_req, res) => {
 });
 
 startPaymentWatcher();
+startSettlerWatcher();
 
 app.listen(PORT, () => {
   console.log(`[api] http://localhost:${PORT}`);

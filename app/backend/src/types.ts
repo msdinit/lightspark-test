@@ -1,4 +1,4 @@
-export type PaymentStatus = "pending" | "paid" | "expired";
+export type PaymentStatus = "pending" | "paid" | "expired" | "settling" | "settled";
 
 export interface Payment {
   id: string;
@@ -12,6 +12,8 @@ export interface Payment {
   paidAt: string | null;
   expiresAt: string;
   signature: string | null;
+  settledAt: string | null;
+  settlementSignature: string | null;
 }
 
 export type PublicPayment = Omit<Payment, "secretKey">;
