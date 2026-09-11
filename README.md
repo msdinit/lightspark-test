@@ -25,6 +25,7 @@ Click **Pay** in the browser, get a fresh Devnet address, send SOL, and the back
 # terminal 1 — API
 cd app/backend
 cp .env.example .env
+echo "MERCHANT_ADDRESS={YOUR_ADDRESS}" >> .env
 npm install
 npm run dev
 
@@ -41,15 +42,17 @@ Open **http://localhost:3001**
 1. Enter an amount (default `0.01` SOL)
 2. Click **Pay**
 3. Send that amount from any Devnet wallet to the shown address
-4. Status updates to `paid` when the watcher sees enough lamports
+4. Status updates to `settling` when the watcher sees enough lamports
+5. Status updates to `settled` when funds transferred to MERCHANT_ADDRESS
 
 ### How it works
 
 1. Backend generates a new Solana keypair per payment
 2. Public address is returned to the browser (secret key is never exposed in the API)
 3. Watcher polls Devnet every few seconds
-4. When balance ≥ expected amount → status `paid`
-5. Unpaid addresses expire after 30 minutes (`PAYMENT_TTL_MS`)
+4. When balance ≥ expected amount → status `settling`, create transfer TX to merchant
+5. Transfer transaction is created for requested amount or the balance - transaction fee, whichever is smaller
+6. Unpaid addresses expire after 30 minutes (`PAYMENT_TTL_MS`)
 
 ### API
 

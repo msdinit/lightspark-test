@@ -1,9 +1,12 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { createPayment, getPayment, type Payment } from "./api.js";
+import {createPayment, getPayment, type Payment, TransientPaymentStates} from "./api.js";
 
 function statusHint(status: Payment["status"]): string {
   if (status === "pending") {
     return "Waiting for a confirmed Devnet transfer. Status updates automatically.";
+  }
+  if (status === "settling") {
+    return "Waiting for a settlement transaction. Status updates automatically.";
   }
   if (status === "paid") {
     return "Payment confirmed on Devnet.";
@@ -19,7 +22,7 @@ export default function App() {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    if (!payment || payment.status !== "pending") return;
+    if (!payment || !TransientPaymentStates.includes(payment.status)) return;
 
     const id = payment.id;
     const timer = window.setInterval(async () => {
@@ -128,9 +131,16 @@ export default function App() {
           </a>
           {payment.explorerTxUrl ? (
             <a href={payment.explorerTxUrl} target="_blank" rel="noreferrer">
-              View transaction
+              View payment transaction
             </a>
-          ) : null}
+          ) : null
+          }
+          {payment.settlementTxUrl ? (
+              <a href={payment.settlementTxUrl} target="_blank" rel="noreferrer">
+                View settlement transaction
+              </a>
+          ) : null
+          }
         </div>
         <div className="actions">
           <button className="btn-ghost" type="button" onClick={onCopy}>
